@@ -1,0 +1,1002 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-autospace:none;
+	font-size:11.0pt;
+	font-family:"Courier New";}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{margin-top:4.55pt;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:93.0pt;
+	margin-bottom:.0001pt;
+	text-autospace:none;
+	font-size:11.0pt;
+	font-family:"Times New Roman",serif;
+	font-weight:bold;}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:5.9pt;
+	margin-bottom:.0001pt;
+	text-autospace:none;
+	font-size:9.0pt;
+	font-family:"Courier New";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-autospace:none;
+	font-size:11.0pt;
+	font-family:"Courier New";}
+p.TableParagraph, li.TableParagraph, div.TableParagraph
+	{mso-style-name:"Table Paragraph";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-autospace:none;
+	font-size:11.0pt;
+	font-family:"Courier New";}
+.MsoChpDefault
+	{font-family:"Calibri",sans-serif;}
+.MsoPapDefault
+	{text-autospace:none;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.5pt 842.0pt;
+	margin:66.0pt 54.0pt 60.0pt 65.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+@page WordSection2
+	{size:595.5pt 842.0pt;
+	margin:66.0pt 54.0pt 60.0pt 65.0pt;}
+div.WordSection2
+	{page:WordSection2;}
+@page WordSection3
+	{size:595.5pt 842.0pt;
+	margin:66.0pt 54.0pt 60.0pt 65.0pt;}
+div.WordSection3
+	{page:WordSection3;}
+@page WordSection4
+	{size:595.5pt 842.0pt;
+	margin:66.0pt 54.0pt 60.0pt 65.0pt;}
+div.WordSection4
+	{page:WordSection4;}
+@page WordSection5
+	{size:595.5pt 842.0pt;
+	margin:66.0pt 54.0pt 60.0pt 65.0pt;}
+div.WordSection5
+	{page:WordSection5;}
+@page WordSection6
+	{size:595.5pt 842.0pt;
+	margin:66.0pt 54.0pt 60.0pt 65.0pt;}
+div.WordSection6
+	{page:WordSection6;}
+-->
+</style>
+
+</head>
+
+<body lang=FR>
+
+<div class=WordSection1>
+
+<p class=MsoBodyText style='margin-left:0cm'><b><span lang=EN-US
+style='font-size:12.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoBodyText style='margin-top:.25pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><b><span lang=EN-US
+style='font-size:10.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoBodyText><span lang=EN-US>import glob</span></p>
+
+<p class=MsoBodyText style='margin-right:366.95pt'><span lang=EN-US>import
+pandas as pd<span style='letter-spacing:-5.3pt'> </span>import numpy as np<span
+style='letter-spacing:.05pt'> </span>import cv2</span></p>
+
+<p class=MsoBodyText style='margin-right:264.35pt'><span lang=EN-US>from
+keras.utils import to_categorical<span style='letter-spacing:-5.3pt'> </span>import
+matplotlib.pyplot as plt</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>import numpy as np</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>import matplotlib.image as mpimg</span></p>
+
+<p class=MsoBodyText style='margin-right:188.75pt'><span lang=EN-US>from
+sklearn.model_selection import train_test_split<span style='letter-spacing:
+-5.3pt'> </span>import tensorflow.compat.v1 as tf<span style='letter-spacing:
+.05pt'> </span>tf.disable_v2_behavior()</span></p>
+
+<p class=MsoBodyText style='margin-top:.5pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-size:
+8.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:42.9pt'><span lang=EN-US>classes =
+['Epizootic ulcerative syndrome (EUS)', 'Ichthyophthirius multifiliis<span
+style='letter-spacing:-5.3pt'> </span>(Ich)']</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>num_classes = len(classes)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>#train_path='training_data'</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:356.15pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US># validation
+split<span style='letter-spacing:.05pt'> </span>validation_size = 0.2<span
+style='letter-spacing:-5.3pt'> </span>test_size=0.2</span></p>
+
+<p class=MsoBodyText style='margin-right:362.5pt'><span lang=EN-US># batch size<span
+style='letter-spacing:.05pt'> </span>batch_size<span style='letter-spacing:
+-.85pt'> </span>=4</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:393.95pt'><span lang=EN-US>img_size=32<span
+style='letter-spacing:.05pt'> </span>num_channels=3</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>num_iteration=70</span></p>
+
+<p class=MsoBodyText style='margin-top:.45pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-size:
+8.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:134.7pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>#data =
+dataset.read_train_sets(train_path, img_size, classes,<span style='letter-spacing:
+-5.3pt'> </span>validation_size=validation_size)</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>def rgb2gray(rgb):</span></p>
+
+<p class=MsoBodyText style='margin-left:27.5pt'><span lang=EN-US>return<span
+style='letter-spacing:-.05pt'> </span>np.dot(rgb[...,:3], [0.2989,<span
+style='letter-spacing:-.05pt'> </span>0.5870, 0.1140])</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:415.55pt'><span lang=EN-US>imgs = []<span
+style='letter-spacing:.05pt'> </span>imgs1 = []<span style='letter-spacing:
+-5.3pt'> </span>label<span style='letter-spacing:-.4pt'> </span>=<span
+style='letter-spacing:-.4pt'> </span>[]</span></p>
+
+<p class=MsoBodyText style='margin-right:221.15pt'><span lang=EN-US>data =
+glob.glob('train_for_2_Classes32x32/*')<span style='letter-spacing:-5.3pt'> </span>print(&quot;Train
+DataSet Size:&quot;,len(data))</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:145.5pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>labels_main =
+pd.read_csv('trainLabelsFor2Classes32x32.csv')<span style='letter-spacing:-5.3pt'>
+</span>print(labels_main.head(150)) #print the first 5 data<span
+style='letter-spacing:-.1pt'> </span>labels</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>labels<span style='letter-spacing:-.05pt'>
+</span>= labels_main.iloc[:,1].tolist() # convert<span style='letter-spacing:
+-.05pt'> </span>labels arrays to list</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:59.1pt'><span lang=EN-US>#Finally, you
+will convert these integer values into one-hot encoding values<span
+style='letter-spacing:-5.3pt'> </span># using the to_categorical function.</span></p>
+
+<p class=MsoBodyText style='margin-right:15.9pt'><span lang=EN-US>#conversion =
+{'Epizootic ulcerative syndrome (EUS)':0,'Ichthyophthirius multifiliis<span
+style='letter-spacing:-5.3pt'> </span>(Ich)':1,'Columnaris':2}</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:21.3pt'><span lang=EN-US>conversion =
+{'Epizootic ulcerative syndrome (EUS)':0,'Ichthyophthirius multifiliis<span
+style='letter-spacing:-5.3pt'> </span>(Ich)':1}</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt'><span lang=EN-US>num_labels = []</span></p>
+
+</div>
+
+<span lang=EN-US style='font-size:11.0pt;font-family:"Courier New"'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<div class=WordSection2>
+
+<p class=MsoBodyText style='margin-top:4.05pt;margin-right:167.15pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>num_labels.append([conversion[item]
+for item in labels])<span style='letter-spacing:-5.3pt'> </span>num_labels =
+np.array(num_labels)</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>#print(num_labels)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:264.35pt'><span lang=EN-US>label_one =
+to_categorical(num_labels)<span style='letter-spacing:-5.3pt'> </span>label_one
+= label_one.reshape(-1,2)<span style='letter-spacing:.05pt'> </span>print(label_one.shape)
+# (600, 2)</span></p>
+
+<p class=MsoBodyText style='margin-top:.1pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:5.85pt;line-height:98%'><span
+lang=EN-US>#Now you will read the images from the train folder by looping
+one-by-one using OpenCV<span style='letter-spacing:-5.3pt'> </span># and store<span
+style='letter-spacing:.05pt'> </span>them in a<span style='letter-spacing:.05pt'>
+</span>list, and finally,<span style='letter-spacing:.05pt'> </span>you will
+convert<span style='letter-spacing:.05pt'> </span>that list into<span
+style='letter-spacing:.05pt'> </span>a NumPy<span style='letter-spacing:.05pt'>
+</span>array.</span></p>
+
+<p class=MsoBodyText style='margin-top:.15pt;margin-right:140.1pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US># The shape of
+your final output should be (1000, 32, 32, 1).<span style='letter-spacing:-5.3pt'>
+</span>for i in data:</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:345.35pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>img =
+cv2.imread(i)<span style='letter-spacing:-5.3pt'> </span>if<span
+style='letter-spacing:-.2pt'> </span>img<span style='letter-spacing:-.25pt'> </span>is<span
+style='letter-spacing:-.2pt'> </span>not<span style='letter-spacing:-.2pt'> </span>None:</span></p>
+
+<p class=MsoBodyText style='margin-left:49.1pt'><span lang=EN-US>imgs.append(img)</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:194.15pt;margin-bottom:
+0cm;margin-left:49.1pt;margin-bottom:.0001pt'><span lang=EN-US>img1=
+rgb2gray(img) #convert into grayscale<span style='letter-spacing:-5.3pt'> </span>imgs1.append(img1)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:285.95pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>train_imgs =
+np.array(imgs)<span style='letter-spacing:.05pt'> </span>train_imgs1<span
+style='letter-spacing:-.4pt'> </span>=<span style='letter-spacing:-.4pt'> </span>np.array(imgs1)</span></p>
+
+<p class=MsoBodyText style='margin-right:86.1pt;line-height:20.5pt'><span
+lang=EN-US>#print(&quot;Training dataset size: &quot;, train_imgs1.shape)#
+(1000, 32, 32, 1)<span style='letter-spacing:-5.3pt'> </span>'''</span></p>
+
+<p class=MsoBodyText style='line-height:10.1pt'><span lang=EN-US>plt.figure(figsize=[10,10])</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+10.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:8.95pt;margin-right:242.75pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US># Display the
+first image in training data<span style='letter-spacing:-5.3pt'> </span>plt.subplot(121)</span></p>
+
+<p class=MsoBodyText style='margin-right:210.35pt'><span lang=EN-US>curr_img =
+np.reshape(train_imgs[25], (32,32,3))<span style='letter-spacing:-5.3pt'> </span>curr_lbl
+= labels_main.iloc[0,1]<span style='letter-spacing:.05pt'> </span>plt.imshow(curr_img)</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt'><span lang=EN-US>plt.title(&quot;(Label:
+&quot; + str(curr_lbl) + &quot;)&quot;)</span></p>
+
+<p class=MsoBodyText style='margin-top:.45pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-size:
+8.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:237.35pt'><span lang=EN-US># Display
+the second image in training data<span style='letter-spacing:-5.3pt'> </span>plt.subplot(122)</span></p>
+
+<p class=MsoBodyText style='margin-right:215.75pt'><span lang=EN-US>curr_img =
+np.reshape(train_imgs[1], (32,32,3))<span style='letter-spacing:-5.3pt'> </span>curr_lbl
+= labels_main.iloc[1,1]<span style='letter-spacing:.05pt'> </span>plt.imshow(curr_img)</span></p>
+
+<p class=MsoBodyText style='margin-right:237.35pt'><span lang=EN-US>plt.title(&quot;(Label:
+&quot; + str(curr_lbl) + &quot;)&quot;)<span style='letter-spacing:-5.3pt'> </span>'''</span></p>
+
+<p class=MsoBodyText style='margin-right:42.9pt'><span lang=EN-US># Normalize
+your grayscale images between 0 and 1 before you feed them into the<span
+style='letter-spacing:-5.3pt'> </span>convolution neural network.</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:130.1pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'>train_images = train_imgs /
+np.max(train_imgs)<span style='letter-spacing:.05pt'> </span>print(np.max(train_images),
+np.min(train_images))  #<span style='letter-spacing:-.5pt'> </span>(1.0,<span
+style='letter-spacing:-.4pt'> </span>0.0)</p>
+
+<p class=MsoBodyText style='margin-left:0cm'>&nbsp;</p>
+
+<p class=MsoBodyText><span lang=EN-US>#<span style='letter-spacing:-.05pt'> </span>Split
+the 600 images into training<span style='letter-spacing:-.05pt'> </span>&amp;
+testing images with a 20% split,</span></p>
+
+<p class=MsoBodyText style='margin-right:38.3pt'><span lang=EN-US>#  which
+means the model will be trained on 800 images and tested on 200 images.<span
+style='letter-spacing:-5.3pt'> </span>X_train, X_test, y_train, y_test =
+train_test_split(train_images, label_one,<span style='letter-spacing:.05pt'> </span>test_size=0.20,
+random_state=42)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:15.9pt'>#X_train, X_val, y_train,
+y_val = train_test_split(X_train, y_train, test_size=0.20,<span
+style='letter-spacing:-5.3pt'> </span>random_state=42)</p>
+
+<p class=MsoBodyText style='margin-left:0cm'>&nbsp;</p>
+
+<p class=MsoBodyText style='margin-top:.05pt'>train_X = X_train.reshape(-1, 32,
+32, 3)</p>
+
+<p class=MsoBodyText><span lang=EN-US>test_X = X_test.reshape(-1, 32, 32, 3)</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>#val_X = X_val.reshape(-1, 32, 32, 3)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:49.1pt;line-height:10.15pt'><span
+lang=EN-US>#</span></p>
+
+<p class=MsoBodyText style='margin-right:32.1pt'><span lang=EN-US>*********************************************************************************<span
+style='letter-spacing:-5.3pt'> </span>print(&quot;Training Data set
+shape:&quot;,train_X.shape)</span></p>
+
+<p class=MsoBodyText style='margin-right:188.75pt'><span lang=EN-US>print(&quot;Testing
+Data set shape:&quot;, test_X.shape)<span style='letter-spacing:.05pt'> </span>#print(&quot;Validation<span
+style='letter-spacing:-.2pt'> </span>Data<span style='letter-spacing:-.2pt'> </span>set<span
+style='letter-spacing:-.2pt'> </span>shape:&quot;,<span style='letter-spacing:
+-.2pt'> </span>val_X.shape)</span></p>
+
+<p class=MsoBodyText style='margin-right:323.75pt;line-height:20.5pt'>print(&quot;y_train:\n&quot;,y_train)<span
+style='letter-spacing:-5.3pt'> </span>train_y = y_train</p>
+
+<p class=MsoBodyText style='line-height:10.1pt'>test_y = y_test</p>
+
+</div>
+
+<span style='font-size:11.0pt;font-family:"Courier New"'><br clear=all
+style='page-break-before:always'>
+</span>
+
+<div class=WordSection3>
+
+<p class=MsoBodyText style='margin-top:4.05pt'>#val_y=y_val</p>
+
+<p class=MsoBodyText style='margin-left:0cm'>&nbsp;</p>
+
+<p class=MsoBodyText style='margin-right:188.75pt'><span lang=EN-US>#print(&quot;Train
+Data set label shape:&quot;, train_y.shape)<span style='letter-spacing:-5.3pt'>
+</span>#print(&quot;Test Data set label shape:&quot;, test_y.shape)<span
+style='letter-spacing:.05pt'> </span>#print(train_y)</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:157.1pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>#print(&quot;</span><u><span
+lang=EN-US style='font-family:"Times New Roman",serif'>                                                                                                                   </span></u><span
+lang=EN-US style='letter-spacing:-.05pt'>&quot;)</span><span lang=EN-US
+style='letter-spacing:-5.3pt'> </span><span lang=EN-US>#print(test_y)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='line-height:10.15pt'><span lang=EN-US>def
+create_weights(shape):</span></p>
+
+<p class=MsoBodyText style='margin-left:27.5pt;line-height:10.15pt'><span
+lang=EN-US>return<span style='letter-spacing:-.05pt'> </span>tf.Variable(tf.truncated_normal(shape,<span
+style='letter-spacing:-.05pt'> </span>stddev=0.05))</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>def create_biases(size):</span></p>
+
+<p class=MsoBodyText style='margin-left:27.5pt'><span lang=EN-US>return<span
+style='letter-spacing:-.05pt'> </span>tf.Variable(tf.constant(0.05,<span
+style='letter-spacing:-.05pt'> </span>shape=[size]))</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>def create_convolutional_layer(input,</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:285.95pt;margin-bottom:
+0cm;margin-left:86.9pt;margin-bottom:.0001pt'><span lang=EN-US>num_input_channels,<span
+style='letter-spacing:-5.3pt'> </span>conv_filter_size,<span style='letter-spacing:
+.05pt'> </span>num_filters):</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:5.1pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>## We shall
+define the weights that will be trained using create_weights function.<span
+style='letter-spacing:-5.3pt'> </span>weights<span style='letter-spacing:-.05pt'>
+</span>= create_weights(shape=[conv_filter_size, conv_filter_size,</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>num_input_channels, num_filters])</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:32.1pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>## We create
+biases using the create_biases function. These are also trained.<span
+style='letter-spacing:-5.3pt'> </span>biases = create_biases(num_filters)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:258.95pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>## Creating the
+convolutional layer<span style='letter-spacing:-5.3pt'> </span>layer =
+tf.nn.conv2d(input=input,</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:242.75pt;margin-bottom:
+0cm;margin-left:119.3pt;margin-bottom:.0001pt'><span lang=EN-US>filter=weights,<span
+style='letter-spacing:.05pt'> </span>strides=[1, 1, 1, 1],<span
+style='letter-spacing:-5.3pt'> </span>padding='SAME')</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:27.5pt'><span lang=EN-US>layer +=
+biases</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:258.95pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>## We shall be
+using max-pooling.<span style='letter-spacing:.05pt'> </span>layer<span
+style='letter-spacing:-.4pt'> </span>=<span style='letter-spacing:-.4pt'> </span>tf.nn.max_pool(value=layer,</span></p>
+
+<p class=MsoBodyText style='margin-left:157.15pt;line-height:10.1pt'><span
+lang=EN-US>ksize=[1, 2, 2, 1],</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:204.9pt;margin-bottom:
+0cm;margin-left:157.15pt;margin-bottom:.0001pt'><span lang=EN-US>strides=[1, 2,
+2, 1],<span style='letter-spacing:-5.3pt'> </span>padding='SAME')</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:37.5pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>## Output of
+pooling is fed to Relu which is the activation function for us.<span
+style='letter-spacing:-5.3pt'> </span>layer = tf.nn.relu(layer)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>return layer</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+10.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+8.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:264.35pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt;text-indent:-21.65pt'><span
+lang=EN-US>def create_flatten_layer(layer):<span style='letter-spacing:.05pt'> </span>layer_shape<span
+style='letter-spacing:-.4pt'> </span>=<span style='letter-spacing:-.4pt'> </span>layer.get_shape()</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:199.55pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>num_features =
+layer_shape[1:4].num_elements()<span style='letter-spacing:-5.3pt'> </span>layer
+= tf.reshape(layer, [-1, num_features])</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:27.5pt'><span lang=EN-US>return layer</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+10.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+10.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:7.95pt'><span lang=EN-US>def
+create_fc_layer(input,</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:318.35pt;margin-bottom:
+0cm;margin-left:76.1pt;margin-bottom:.0001pt'><span lang=EN-US>num_inputs,<span
+style='letter-spacing:.05pt'> </span>num_outputs,<span style='letter-spacing:
+.05pt'> </span>use_relu=True):</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:27.5pt'><span lang=EN-US>#Let's define trainable
+weights and biases.</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:140.15pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt;line-height:98%'><span lang=EN-US>weights
+= create_weights(shape=[num_inputs, num_outputs])<span style='letter-spacing:
+-5.3pt'> </span>biases = create_biases(num_outputs)</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:221.15pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>layer =
+tf.matmul(input, weights) + biases<span style='letter-spacing:-5.3pt'> </span>if
+use_relu:</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:291.35pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt;text-indent:21.6pt;line-height:
+200%'><span lang=EN-US>layer = tf.nn.relu(layer)<span style='letter-spacing:
+-5.3pt'> </span>return layer</span></p>
+
+</div>
+
+<span lang=EN-US style='font-size:11.0pt;line-height:200%;font-family:"Courier New"'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<div class=WordSection4>
+
+<p class=MsoBodyText style='margin-top:4.05pt'><span lang=EN-US># Placeholders
+and input</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>x<span style='letter-spacing:-.05pt'> </span>=
+tf.placeholder(tf.float32,<span style='letter-spacing:-.05pt'> </span>shape=[None,
+img_size,img_size,num_channels], name='x')</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:53.7pt'><span lang=EN-US>y_true =
+tf.placeholder(tf.float32, shape=[None, num_classes], name='y_true')<span
+style='letter-spacing:-5.3pt'> </span>y_true_cls = tf.argmax(y_true,
+dimension=1)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:361.55pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>filter_size_conv1=3<span
+style='letter-spacing:.05pt'> </span>num_filters_conv1=32</span></p>
+
+<p class=MsoBodyText style='margin-top:.45pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-size:
+8.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:361.55pt'><span lang=EN-US>filter_size_conv2=3<span
+style='letter-spacing:.05pt'> </span>num_filters_conv2=64</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:356.15pt'><span lang=EN-US>filter_size_conv3=3<span
+style='letter-spacing:.05pt'> </span>num_filters_conv3=128</span></p>
+
+<p class=MsoBodyText style='margin-right:377.75pt;line-height:20.5pt'><span
+lang=EN-US>fc_layer_size=128<span style='letter-spacing:-5.3pt'> </span>#Network
+Design</span></p>
+
+<p class=MsoBodyText style='line-height:10.1pt'><span lang=EN-US>layer_conv1 =
+create_convolutional_layer(input=x,</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:199.55pt;margin-bottom:
+0cm;margin-left:86.9pt;margin-bottom:.0001pt'><span lang=EN-US>num_input_channels=num_channels,<span
+style='letter-spacing:.05pt'> </span>conv_filter_size=filter_size_conv1,<span
+style='letter-spacing:-5.3pt'> </span>num_filters=num_filters_conv1)</span></p>
+
+<p class=MsoBodyText style='margin-top:.5pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-size:
+8.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:150.95pt;margin-bottom:
+0cm;margin-left:86.9pt;margin-bottom:.0001pt;text-indent:-81.05pt'><span
+lang=EN-US>layer_conv2 = create_convolutional_layer(input=layer_conv1,<span
+style='letter-spacing:-5.3pt'> </span>num_input_channels=num_filters_conv1,<span
+style='letter-spacing:.05pt'> </span>conv_filter_size=filter_size_conv2,<span
+style='letter-spacing:.05pt'> </span>num_filters=num_filters_conv2)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:156.35pt;margin-bottom:
+0cm;margin-left:86.9pt;margin-bottom:.0001pt;text-indent:-81.05pt'><span
+lang=EN-US>layer_conv3= create_convolutional_layer(input=layer_conv2,<span
+style='letter-spacing:-5.3pt'> </span>num_input_channels=num_filters_conv2,<span
+style='letter-spacing:.05pt'> </span>conv_filter_size=filter_size_conv3,<span
+style='letter-spacing:.05pt'> </span>num_filters=num_filters_conv3)</span></p>
+
+<p class=MsoBodyText style='margin-top:.45pt;margin-right:221.15pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt;line-height:20.0pt'><span
+lang=EN-US>layer_flat = create_flatten_layer(layer_conv3)<span
+style='letter-spacing:-5.3pt'> </span>layer_fc1 =
+create_fc_layer(input=layer_flat,</span></p>
+
+<p class=MsoBodyText style='margin-top:.25pt;margin-right:64.55pt;margin-bottom:
+0cm;margin-left:119.3pt;margin-bottom:.0001pt'><span lang=EN-US>num_inputs=layer_flat.get_shape()[1:4].num_elements(),<span
+style='letter-spacing:-5.3pt'> </span>num_outputs=fc_layer_size,</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:119.3pt;margin-bottom:.0001pt'><span lang=EN-US>use_relu=True)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>layer_fc2 =
+create_fc_layer(input=layer_fc1,</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:221.15pt;margin-bottom:
+0cm;margin-left:119.3pt;margin-bottom:.0001pt'><span lang=EN-US>num_inputs=fc_layer_size,<span
+style='letter-spacing:-5.3pt'> </span>num_outputs=num_classes,<span
+style='letter-spacing:.05pt'> </span>use_relu=False)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>y_pred<span style='letter-spacing:-.05pt'>
+</span>= tf.nn.softmax(layer_fc2,name=&quot;y_pred&quot;)<span
+style='letter-spacing:-.05pt'> </span># Prediction</span></p>
+
+<p class=MsoBodyText style='margin-right:15.9pt'><span lang=EN-US>y_pred_cls =
+tf.argmax(y_pred, dimension=1) # The class having higher probability is<span
+style='letter-spacing:-5.3pt'> </span>the prediction of the network</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt'><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-right:5.1pt'><span lang=EN-US>Now, let’s
+define the cost that will be minimized to reach the optimum value of<span
+style='letter-spacing:.05pt'> </span>weights. We will use a simple cost that
+will be calculated using a Tensorflow function<span style='letter-spacing:-5.3pt'>
+</span>softmax_cross_entropy_with_logits which takes the output of last fully
+connected layer<span style='letter-spacing:-5.3pt'> </span>and<span
+style='letter-spacing:-.05pt'> </span>actual labels to calculate cross_entropy
+whose average will<span style='letter-spacing:-.05pt'> </span>give us the cost.</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-right:15.9pt'><span lang=EN-US>cross_entropy
+= tf.nn.softmax_cross_entropy_with_logits(logits=y_pred,labels=y_true)<span
+style='letter-spacing:-5.3pt'> </span>cost = tf.reduce_mean(cross_entropy)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-top:.1pt;margin-right:10.5pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt;line-height:98%'><span lang=EN-US>We
+shall use AdamOptimizer for gradient calculation and weight optimization. We
+shall<span style='letter-spacing:-5.3pt'> </span>specify<span style='letter-spacing:
+-.05pt'> </span>that we are trying to minimise cost with a learning rate of<span
+style='letter-spacing:-.05pt'> </span>0.0001</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt'><span lang=EN-US>optimizer<span
+style='letter-spacing:-.05pt'> </span>=<span style='letter-spacing:-.05pt'> </span>tf.train.AdamOptimizer(learning_rate=1e-4).minimize(cost)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>correct_prediction<span style='letter-spacing:
+-.05pt'> </span>=<span style='letter-spacing:-.05pt'> </span>tf.equal(y_pred_cls,
+y_true_cls)</span></p>
+
+<p class=MsoBodyText style='margin-right:113.1pt'><span lang=EN-US>accuracy =
+tf.reduce_mean(tf.cast(correct_prediction, tf.float32))<span style='letter-spacing:
+-5.3pt'> </span>'''</span></p>
+
+<p class=MsoBodyText style='margin-right:145.5pt'><span lang=EN-US>val_acc =
+session.run(accuracy,feed_dict=feed_dict_validate)<span style='letter-spacing:
+-5.3pt'> </span>acc<span style='letter-spacing:-.05pt'> </span>= session.run(accuracy,
+feed_dict=feed_dict_train)</span></p>
+
+</div>
+
+<span lang=EN-US style='font-size:11.0pt;font-family:"Courier New"'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<div class=WordSection5>
+
+<p class=MsoBodyText style='margin-top:4.05pt'><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US># Training function</span></p>
+
+<p class=MsoBodyText><span lang=EN-US># Initializing the variables</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>init = tf.global_variables_initializer()</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt'><span lang=EN-US>#def
+train(num_iteration):</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:329.2pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt;text-indent:-21.65pt'><span
+lang=EN-US>with tf.Session() as sess:<span style='letter-spacing:-5.3pt'> </span>sess.run(init)<span
+style='letter-spacing:.05pt'> </span>train_loss = []<span style='letter-spacing:
+.05pt'> </span>test_loss = []<span style='letter-spacing:.05pt'> </span>#val_loss=[]<span
+style='letter-spacing:.05pt'> </span>train_accuracy = []<span style='letter-spacing:
+.05pt'> </span>test_accuracy = []<span style='letter-spacing:.05pt'> </span>#val_accuracy=[]</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:113.1pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>summary_writer =
+tf.summary.FileWriter('./Output', sess.graph)<span style='letter-spacing:-5.3pt'>
+</span>#global total_iterations</span></p>
+
+<p class=MsoBodyText style='margin-top:.45pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-size:
+8.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>for i in
+range(num_iteration):</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:183.4pt;margin-bottom:
+0cm;margin-left:70.7pt;margin-bottom:.0001pt;text-indent:-21.65pt'><span
+lang=EN-US>for batch in range(len(train_X)//batch_size):<span style='letter-spacing:
+-5.3pt'> </span>#batch1=batch</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:5.1pt;margin-bottom:
+0cm;margin-left:70.7pt;margin-bottom:.0001pt'><span lang=EN-US>batch_x =
+train_X[batch*batch_size:min((batch+1)*batch_size,len(train_X))]<span
+style='letter-spacing:-5.3pt'> </span>batch_y<span style='letter-spacing:-.4pt'>
+</span>=<span style='letter-spacing:-.4pt'> </span>train_y[batch*batch_size:min((batch+1)*batch_size,len(train_y))]</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:113.1pt;text-indent:64.8pt'><span
+lang=EN-US>#batch_val =<span style='letter-spacing:.05pt'> </span>batch_x[batch1*batch_size:min((batch1+1)*batch_size,len(batch_x))]</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:113.1pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt;text-indent:64.8pt'><span
+lang=EN-US>#batch_val_y =<span style='letter-spacing:.05pt'> </span>batch_y[batch1*batch_size:min((batch1+1)*batch_size,len(batch_y))]</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:70.7pt'><span lang=EN-US>feed_dict_tr =
+{x: batch_x,</span></p>
+
+<p class=MsoBodyText style='margin-left:151.7pt'><span lang=EN-US>y_true:
+batch_y}</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:134.75pt;margin-bottom:
+0cm;margin-left:70.7pt;margin-bottom:.0001pt'><span lang=EN-US>opt =
+sess.run(optimizer, feed_dict= feed_dict_tr)<span style='letter-spacing:-5.3pt'>
+</span>'''</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:81.5pt;margin-bottom:
+0cm;margin-left:92.3pt;margin-bottom:.0001pt;text-indent:-21.65pt'><span
+lang=EN-US>if<span style='letter-spacing:.05pt'> </span>i<span
+style='letter-spacing:.05pt'> </span>%<span style='letter-spacing:.05pt'> </span>int(data.train.num_examples/batch_size)<span
+style='letter-spacing:.05pt'> </span>==<span style='letter-spacing:.05pt'> </span>0:<span
+style='letter-spacing:.05pt'> </span>val_loss = session.run(cost,
+feed_dict=feed_dict_val)<span style='letter-spacing:.05pt'> </span>epoch<span
+style='letter-spacing:-.25pt'> </span>=<span style='letter-spacing:-.2pt'> </span>int(i<span
+style='letter-spacing:-.25pt'> </span>/<span style='letter-spacing:-.2pt'> </span>int(data.train.num_examples/batch_size))</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+4.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:5.0pt;margin-right:64.5pt;margin-bottom:
+0cm;margin-left:92.3pt;margin-bottom:.0001pt'><span lang=EN-US>show_progress(epoch,
+feed_dict_tr, feed_dict_val, val_loss)<span style='letter-spacing:-5.3pt'> </span>saver.save(session,<span
+style='letter-spacing:-.05pt'> </span>'dogs-cats-model')</span></p>
+
+<p class=MsoBodyText style='margin-left:70.7pt'><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-left:70.7pt'><span lang=EN-US>loss,<span
+style='letter-spacing:-.05pt'> </span>acc =<span style='letter-spacing:-.05pt'>
+</span>sess.run([cost, accuracy], feed_dict=feed_dict_tr)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:103.1pt;margin-bottom:
+0cm;margin-left:70.7pt;margin-bottom:.0001pt'><span lang=EN-US># Calculate
+accuracy for all  validation images<span style='letter-spacing:.05pt'> </span>#feed_dict_val
+= {x: batch_val,                y_true: batch_val_y}<span style='letter-spacing:
+.05pt'> </span>#opt_val<span style='letter-spacing:-.25pt'> </span>=<span
+style='letter-spacing:-.2pt'> </span>sess.run(optimizer,<span style='letter-spacing:
+-.25pt'> </span>feed_dict=<span style='letter-spacing:-.2pt'> </span>feed_dict_val)</span></p>
+
+<p class=MsoBodyText style='margin-left:70.7pt'><span lang=EN-US>#valid_loss1,val_acc=<span
+style='letter-spacing:-.05pt'> </span>sess.run([cost,accuracy],<span
+style='letter-spacing:-.05pt'> </span>feed_dict=feed_dict_val)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:49.1pt'><span lang=EN-US>print(&quot;Iter
+&quot; + str(i) + &quot;, Loss= &quot; + \</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:75.35pt;margin-bottom:
+0cm;margin-left:124.7pt;margin-bottom:.0001pt'><span lang=EN-US>&quot;{:.6f}&quot;.format(loss)
++ &quot;, Training Accuracy= &quot; + \<span style='letter-spacing:-5.3pt'> </span>&quot;{:.5f}&quot;.format(acc))</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+10.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+8.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:49.1pt;margin-bottom:.0001pt'><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:275.15pt;margin-bottom:
+0cm;margin-left:49.1pt;margin-bottom:.0001pt'><span lang=EN-US>train_loss.append(loss)<span
+style='letter-spacing:.05pt'> </span>val_loss.append(valid_loss1)<span
+style='letter-spacing:-5.3pt'> </span>val_accuracy.append(val_acc)</span></p>
+
+<p class=MsoBodyText style='margin-top:.1pt;margin-right:134.75pt;margin-bottom:
+0cm;margin-left:49.1pt;margin-bottom:.0001pt;line-height:98%'><span lang=EN-US>print(&quot;Validation
+Accuracy:&quot;,&quot;{:.5f}&quot;.format(val_acc))<span style='letter-spacing:
+-5.3pt'> </span>'''</span></p>
+
+<p class=MsoBodyText style='margin-left:49.1pt'><span lang=EN-US>print(&quot;Optimization
+Finished!&quot;)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:49.1pt'><span lang=EN-US># Calculate
+accuracy for all  test images</span></p>
+
+<p class=MsoBodyText style='margin-right:10.5pt;text-indent:43.2pt'><span
+lang=EN-US>test_acc,valid_loss = sess.run([accuracy,cost], feed_dict={x:
+test_X,y_true :<span style='letter-spacing:-5.3pt'> </span>test_y})</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:275.15pt;margin-bottom:
+0cm;margin-left:49.1pt;margin-bottom:.0001pt'><span lang=EN-US>train_loss.append(loss)<span
+style='letter-spacing:.05pt'> </span>test_loss.append(valid_loss)<span
+style='letter-spacing:-5.3pt'> </span>train_accuracy.append(acc)</span></p>
+
+</div>
+
+<span lang=EN-US style='font-size:11.0pt;font-family:"Courier New"'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<div class=WordSection6>
+
+<p class=MsoBodyText style='margin-top:4.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:49.1pt;margin-bottom:.0001pt'><span lang=EN-US>test_accuracy.append(test_acc)</span></p>
+
+<p class=MsoBodyText style='margin-left:49.1pt'><span lang=EN-US>print(&quot;Testing<span
+style='letter-spacing:-.1pt'> </span>Accuracy:&quot;,&quot;{:.5f}&quot;.format(test_acc))</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:27.5pt'><span lang=EN-US>#train(num_iteration)</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:145.55pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>#Create a saver
+object which will save all the variables<span style='letter-spacing:-5.3pt'> </span>saver
+= tf.train.Saver()</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>saver.save(sess,
+'Output/the_model')</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:59.1pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US># loss plots
+between training and validation data<span style='letter-spacing:.05pt'> </span>plt.plot(range(len(train_loss)),
+train_loss, 'b', label='Training loss')<span style='letter-spacing:-5.3pt'> </span>plt.plot(range(len(train_loss)),
+test_loss, 'r', label='Test loss')<span style='letter-spacing:.05pt'> </span>plt.title('Training
+and Test loss')</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:269.75pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>plt.xlabel('Epochs
+',fontsize=16)<span style='letter-spacing:-5.3pt'> </span>plt.ylabel('Loss',fontsize=16)<span
+style='letter-spacing:.05pt'> </span>plt.legend()</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:383.15pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>plt.figure()<span
+style='letter-spacing:-5.3pt'> </span>plt.show()</span></p>
+
+<p class=MsoBodyText style='margin-top:.45pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-size:
+8.5pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:15.9pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US># plot the
+accuracy between training and validation data<span style='letter-spacing:.05pt'>
+</span>plt.plot(range(len(train_loss)), train_accuracy, 'b', label='Training
+Accuracy')<span style='letter-spacing:-5.3pt'> </span>plt.plot(range(len(train_loss)),
+test_accuracy, 'r', label='Test Accuracy')<span style='letter-spacing:.05pt'> </span>plt.title('Training
+and Test Accuracy')</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:269.75pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>plt.xlabel('Epochs
+',fontsize=16)<span style='letter-spacing:-5.3pt'> </span>plt.ylabel('Loss',fontsize=16)<span
+style='letter-spacing:.05pt'> </span>plt.legend()</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:383.15pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>plt.figure()<span
+style='letter-spacing:-5.3pt'> </span>plt.show()</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:150.9pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>saver =
+tf.train.import_meta_graph('Output/the_model.meta')<span style='letter-spacing:
+-5.3pt'> </span>#saver.restore(sess,<span style='letter-spacing:-.05pt'> </span>tf.train.latest_checkpoint('./'))</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>'''</span></p>
+
+<p class=MsoBodyText style='margin-right:318.35pt;text-indent:5.4pt'><span
+lang=EN-US>Use an image for prediction<span style='letter-spacing:-5.3pt'> </span>'''</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>images = []</span></p>
+
+<p class=MsoBodyText style='margin-top:.1pt;margin-right:183.35pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt;line-height:98%'><span lang=EN-US>image
+=cv2.imread(&quot;train_for_2_Classes32x32/54.jpeg&quot;)<span
+style='letter-spacing:-5.3pt'> </span># Resizing the image to our desired size
+and</span></p>
+
+<p class=MsoBodyText style='margin-right:119.3pt'><span lang=EN-US>#
+preprocessing<span style='letter-spacing:.05pt'> </span>will<span
+style='letter-spacing:.05pt'> </span>be<span style='letter-spacing:.05pt'> </span>done
+exactly<span style='letter-spacing:.05pt'> </span>as<span style='letter-spacing:
+.05pt'> </span>done<span style='letter-spacing:.05pt'> </span>during<span
+style='letter-spacing:-.1pt'> </span>training<span style='letter-spacing:.05pt'>
+</span>image = cv2.resize(image, (img_size, img_size), cv2.INTER_LINEAR)<span
+style='letter-spacing:-5.3pt'> </span>images.append(image)</span></p>
+
+<p class=MsoBodyText style='margin-right:242.75pt'><span lang=EN-US>images =
+np.array(images, dtype=np.uint8)<span style='letter-spacing:.05pt'> </span>images
+= np.array(images,dtype=np.float32)<span style='letter-spacing:-5.3pt'> </span>images
+= np.multiply(images, 1.0/255.0)</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:5.1pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>#The input to the
+network is of shape [None image_size image_size num_channels]. Hence<span
+style='letter-spacing:-5.3pt'> </span>we reshape.</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>x_batch<span style='letter-spacing:-.05pt'>
+</span>=<span style='letter-spacing:-.05pt'> </span>images.reshape(1,
+img_size,img_size,num_channels)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+10.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US style='font-size:
+8.0pt'>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>graph = tf.get_default_graph()</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText><span lang=EN-US>y_pred =
+graph.get_tensor_by_name(&quot;y_pred:0&quot;)</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:199.55pt'><span lang=EN-US>## Let's
+feed the images to the input placeholders<span style='letter-spacing:-5.3pt'> </span>x=
+graph.get_tensor_by_name(&quot;x:0&quot;)</span></p>
+
+<p class=MsoBodyText style='margin-top:.05pt;margin-right:226.55pt;margin-bottom:
+0cm;margin-left:5.9pt;margin-bottom:.0001pt'><span lang=EN-US>y_true =
+graph.get_tensor_by_name(&quot;y_true:0&quot;)<span style='letter-spacing:-5.3pt'>
+</span>y_test_images = np.zeros((1, 2))</span></p>
+
+<p class=MsoBodyText style='margin-left:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoBodyText style='margin-right:172.55pt;line-height:200%'><span
+lang=EN-US>feed_dict_testing = {x: x_batch, y_true: y_test_images}<span
+style='letter-spacing:-5.3pt'> </span>init = tf.global_variables_initializer()</span></p>
+
+<p class=MsoBodyText style='line-height:10.1pt'><span lang=EN-US>#def
+train(num_iteration):</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:329.2pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt;text-indent:-21.65pt'><span
+lang=EN-US>with tf.Session() as sess:<span style='letter-spacing:-5.3pt'> </span>sess.run(init)</span></p>
+
+<p class=MsoBodyText style='margin-top:0cm;margin-right:167.15pt;margin-bottom:
+0cm;margin-left:27.5pt;margin-bottom:.0001pt'><span lang=EN-US>result=sess.run(y_pred,
+feed_dict=feed_dict_testing)<span style='letter-spacing:-5.3pt'> </span>print(&quot;Prediction
+Result:&quot;,result)</span></p>
+
+</div>
+
+</body>
+
+</html>
